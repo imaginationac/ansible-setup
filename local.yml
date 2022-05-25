@@ -7,4 +7,11 @@
   - name: install packages
     package:
       name:
+        - bat
+        - exa
+        - fzf
         - neovim 
+        - ripgrep
+        - tmux
+        - zoxide
+        - zsh
