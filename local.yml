@@ -17,6 +17,10 @@
         - zoxide
         - zsh
   
+  - name: change default shell to zsh
+    ansible.builtin.command: "chsh -s $(which zsh)"
+    become_user: dorian
+
   - name: add ansible user
     user:
       name: ansible
