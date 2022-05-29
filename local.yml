@@ -1,5 +1,6 @@
 ---
 - hosts: localhost
+  name: autoprovision workstation configuration
   connection: local
   become: true
 
