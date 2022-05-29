@@ -1,0 +1,3 @@
+- [] Change default shell to zsh
+- [] On Debian based distros, alias batcat to bat
+- [] Remap Caps Lock to Ctrl
