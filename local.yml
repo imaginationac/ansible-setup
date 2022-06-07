@@ -23,6 +23,17 @@
       shell: /usr/bin/zsh
       state: present
 
+  - name: check if oh-my-zsh is installed
+    ansible.builtin.stat:
+      path: /home/dorian/.oh-my-zsh
+    register: stat_oh_my_zsh_result
+
+  - name: clone oh-my-zsh
+    ansible.builtin.git:
+      repo: https://github.com/ohmyzsh/ohmyzsh
+      dest: /home/dorian/.oh-my-zsh
+    when: not stat_oh_my_zsh_result.stat.exists 
+
   - name: symlink zshrc
     ansible.builtin.file:
       src: /home/dorian/Projects/ansible-setup/files/zshrc
