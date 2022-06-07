@@ -23,13 +23,20 @@
       shell: /usr/bin/zsh
       state: present
 
-  # TODO: Symlink zshrc
   - name: symlink zshrc
     ansible.builtin.file:
       src: /home/dorian/Projects/ansible-setup/files/zshrc
       path: /home/dorian/.zshrc
       owner: dorian
       group: dorian 
+      state: link
+
+  - name: symlink .aliases
+    ansible.builtin.file:
+      src: /home/dorian/Projects/ansible-setup/files/aliases
+      path: /home/dorian/.aliases
+      owner: dorian
+      group: dorian
       state: link
 
   - name: add ansible user
