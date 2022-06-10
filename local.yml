@@ -67,6 +67,33 @@
       group: dorian
       state: link
 
+  - name: check if tmux-plugin-manager (tpm) is installed
+    ansible.builtin.stat:
+      path: /home/dorian/.tmux/plugins/tpm
+    register: stat_tpm_result
+
+  - name: install tmux-plugin-manager
+    ansible.builtin.git:
+      repo: https://github.com/tmux-plugins/tpm
+      dest: /home/dorian/.tmux/plugins/tpm
+    when: not stat_tpm_result.stat.exists
+
+  - name: change owner & group of tpm
+    ansible.builtin.file: 
+      path: /home/dorian/.tmux
+      owner: dorian
+      group: dorian
+      recurse: yes
+      state: directory
+
+  - name: symlink tmux.conf
+    ansible.builtin.file:
+      src: /home/dorian/Projects/ansible-setup/files/tmux.conf
+      path: /home/dorian/.tmux.conf
+      owner: dorian
+      group: dorian
+      state: link
+
   - name: add ansible user
     user:
       name: ansible
