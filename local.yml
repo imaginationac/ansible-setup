@@ -42,6 +42,15 @@
       dest: /home/dorian/.oh-my-zsh
     when: not stat_oh_my_zsh_result.stat.exists 
 
+  # The above task creates the owner:group as root:root. Need to recursively change to dorian:dorian
+  - name: change owner & group to dorian
+    ansible.builtin.file:
+      path: /home/dorian/.oh-my-zsh
+      owner: dorian
+      group: dorian
+      recurse: yes
+      state: directory
+
   - name: symlink zshrc
     ansible.builtin.file:
       src: /home/dorian/Projects/ansible-setup/files/zshrc
