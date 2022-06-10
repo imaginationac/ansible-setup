@@ -4,9 +4,16 @@
   connection: local
   become: true
 
+  pre_tasks:
+    - name: update package cache on Debian-based distros
+      ansible.builtin.apt:
+        update_cache: yes
+        state: latest
+      when: ansible_facts['os_family'] == "Debian"
+
   tasks:
   - name: install packages
-    package:
+    ansible.builtin.package:
       name:
         - bat
         - exa
@@ -16,6 +23,7 @@
         - tmux
         - zoxide
         - zsh
+      state: present
   
   - name: change default shell to zsh
     user:
@@ -34,6 +42,15 @@
       dest: /home/dorian/.oh-my-zsh
     when: not stat_oh_my_zsh_result.stat.exists 
 
+  # The above task creates the owner:group as root:root. Need to recursively change to dorian:dorian
+  - name: change owner & group to dorian
+    ansible.builtin.file:
+      path: /home/dorian/.oh-my-zsh
+      owner: dorian
+      group: dorian
+      recurse: yes
+      state: directory
+
   - name: symlink zshrc
     ansible.builtin.file:
       src: /home/dorian/Projects/ansible-setup/files/zshrc
@@ -46,6 +63,33 @@
     ansible.builtin.file:
       src: /home/dorian/Projects/ansible-setup/files/aliases
       path: /home/dorian/.aliases
+      owner: dorian
+      group: dorian
+      state: link
+
+  - name: check if tmux-plugin-manager (tpm) is installed
+    ansible.builtin.stat:
+      path: /home/dorian/.tmux/plugins/tpm
+    register: stat_tpm_result
+
+  - name: install tmux-plugin-manager
+    ansible.builtin.git:
+      repo: https://github.com/tmux-plugins/tpm
+      dest: /home/dorian/.tmux/plugins/tpm
+    when: not stat_tpm_result.stat.exists
+
+  - name: change owner & group of tpm
+    ansible.builtin.file: 
+      path: /home/dorian/.tmux
+      owner: dorian
+      group: dorian
+      recurse: yes
+      state: directory
+
+  - name: symlink tmux.conf
+    ansible.builtin.file:
+      src: /home/dorian/Projects/ansible-setup/files/tmux.conf
+      path: /home/dorian/.tmux.conf
       owner: dorian
       group: dorian
       state: link
