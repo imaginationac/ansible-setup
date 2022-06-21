@@ -51,21 +51,21 @@
       recurse: yes
       state: directory
 
-  - name: symlink zshrc
-    ansible.builtin.file:
-      src: /home/dorian/Projects/ansible-setup/files/zshrc
-      path: /home/dorian/.zshrc
+  - name: copy zshrc
+    ansible.builtin.copy:
+      src: files/zshrc
+      dest: /home/dorian/.zshrc
       owner: dorian
       group: dorian 
-      state: link
+      mode: u=rwx,g=rwx,o=rx
 
-  - name: symlink .aliases
-    ansible.builtin.file:
-      src: /home/dorian/Projects/ansible-setup/files/aliases
-      path: /home/dorian/.aliases
+  - name: copy aliases
+    ansible.builtin.copy:
+      src: files/aliases
+      dest: /home/dorian/.aliases
       owner: dorian
       group: dorian
-      state: link
+      mode: u=rwx,g=rwx,o=rx
 
   - name: check if tmux-plugin-manager (tpm) is installed
     ansible.builtin.stat:
@@ -86,13 +86,13 @@
       recurse: yes
       state: directory
 
-  - name: symlink tmux.conf
-    ansible.builtin.file:
-      src: /home/dorian/Projects/ansible-setup/files/tmux.conf
-      path: /home/dorian/.tmux.conf
+  - name: copy tmux.conf
+    ansible.builtin.copy:
+      src: files/tmux.conf
+      dest: /home/dorian/.tmux.conf
       owner: dorian
       group: dorian
-      state: link
+      mode: u=rwx,g=rwx,o=rw
 
   - name: add ansible user
     user:
