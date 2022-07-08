@@ -18,6 +18,7 @@
         - bat
         - exa
         - fzf
+        - mosh
         - neovim 
         - ripgrep
         - tmux
