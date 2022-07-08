@@ -18,6 +18,7 @@
         - bat
         - exa
         - fzf
+        - gh
         - mosh
         - neovim 
         - ripgrep
