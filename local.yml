@@ -7,111 +7,113 @@
   pre_tasks:
     - name: update package cache on Debian-based distros
       ansible.builtin.apt:
-        update_cache: yes
-        state: latest
+        update_cache: true
+        state: present
       when: ansible_facts['os_family'] == "Debian"
 
   tasks:
-  - name: install packages
-    ansible.builtin.package:
-      name:
-        - bat
-        - exa
-        - fzf
-        - gh
-        - mosh
-        - neovim 
-        - ripgrep
-        - tmux
-        - zoxide
-        - zsh
-      state: present
-  
-  - name: change default shell to zsh
-    user:
-      name: dorian
-      shell: /usr/bin/zsh
-      state: present
+    - name: install packages
+      ansible.builtin.package:
+        name:
+          - bat
+          - exa
+          - fzf
+          - gh
+          - mosh
+          - neovim
+          - ripgrep
+          - tmux
+          - zoxide
+          - zsh
+        state: present
 
-  - name: check if oh-my-zsh is installed
-    ansible.builtin.stat:
-      path: /home/dorian/.oh-my-zsh
-    register: stat_oh_my_zsh_result
+    - name: change default shell to zsh
+      user:
+        name: dorian
+        shell: /usr/bin/zsh
+        state: present
 
-  - name: clone oh-my-zsh
-    ansible.builtin.git:
-      repo: https://github.com/ohmyzsh/ohmyzsh
-      dest: /home/dorian/.oh-my-zsh
-    when: not stat_oh_my_zsh_result.stat.exists 
+    - name: check if oh-my-zsh is installed
+      ansible.builtin.stat:
+        path: /home/dorian/.oh-my-zsh
+      register: stat_oh_my_zsh_result
 
-  # The above task creates the owner:group as root:root. Need to recursively change to dorian:dorian
-  - name: change owner & group to dorian
-    ansible.builtin.file:
-      path: /home/dorian/.oh-my-zsh
-      owner: dorian
-      group: dorian
-      recurse: yes
-      state: directory
+    - name: clone oh-my-zsh
+      ansible.builtin.git:
+        repo: https://github.com/ohmyzsh/ohmyzsh
+        dest: /home/dorian/.oh-my-zsh
+        version:
+      when: not stat_oh_my_zsh_result.stat.exists
 
-  - name: copy zshrc
-    ansible.builtin.copy:
-      src: files/zshrc
-      dest: /home/dorian/.zshrc
-      owner: dorian
-      group: dorian 
-      mode: u=rwx,g=rwx,o=rx
+    # The above task creates the owner:group as root:root. Need to recursively change to dorian:dorian
+    - name: change owner & group to dorian
+      ansible.builtin.file:
+        path: /home/dorian/.oh-my-zsh
+        owner: dorian
+        group: dorian
+        recurse: true
+        state: directory
 
-  - name: copy aliases
-    ansible.builtin.copy:
-      src: files/aliases
-      dest: /home/dorian/.aliases
-      owner: dorian
-      group: dorian
-      mode: u=rwx,g=rwx,o=rx
+    - name: copy zshrc
+      ansible.builtin.copy:
+        src: files/zshrc
+        dest: /home/dorian/.zshrc
+        owner: dorian
+        group: dorian
+        mode: u=rwx,g=rwx,o=rx
 
-  - name: check if tmux-plugin-manager (tpm) is installed
-    ansible.builtin.stat:
-      path: /home/dorian/.tmux/plugins/tpm
-    register: stat_tpm_result
+    - name: copy aliases
+      ansible.builtin.copy:
+        src: files/aliases
+        dest: /home/dorian/.aliases
+        owner: dorian
+        group: dorian
+        mode: u=rwx,g=rwx,o=rx
 
-  - name: install tmux-plugin-manager
-    ansible.builtin.git:
-      repo: https://github.com/tmux-plugins/tpm
-      dest: /home/dorian/.tmux/plugins/tpm
-    when: not stat_tpm_result.stat.exists
+    - name: check if tmux-plugin-manager (tpm) is installed
+      ansible.builtin.stat:
+        path: /home/dorian/.tmux/plugins/tpm
+      register: stat_tpm_result
 
-  - name: change owner & group of tpm
-    ansible.builtin.file: 
-      path: /home/dorian/.tmux
-      owner: dorian
-      group: dorian
-      recurse: yes
-      state: directory
+    - name: install tmux-plugin-manager
+      ansible.builtin.git:
+        repo: https://github.com/tmux-plugins/tpm
+        dest: /home/dorian/.tmux/plugins/tpm
+        version:
+      when: not stat_tpm_result.stat.exists
 
-  - name: copy tmux.conf
-    ansible.builtin.copy:
-      src: files/tmux.conf
-      dest: /home/dorian/.tmux.conf
-      owner: dorian
-      group: dorian
-      mode: u=rwx,g=rwx,o=rw
+    - name: change owner & group of tpm
+      ansible.builtin.file:
+        path: /home/dorian/.tmux
+        owner: dorian
+        group: dorian
+        recurse: true
+        state: directory
 
-  - name: add ansible user
-    user:
-      name: ansible
-      system: yes
+    - name: copy tmux.conf
+      ansible.builtin.copy:
+        src: files/tmux.conf
+        dest: /home/dorian/.tmux.conf
+        owner: dorian
+        group: dorian
+        mode: u=rwx,g=rwx,o=rw
 
-  - name: set up sudo for ansible user
-    copy: 
-      src: files/sudoer_ansible
-      dest: /etc/sudoers.d/ansible
-      owner: root
-      group: root
-      mode: 0440
+    - name: add ansible user
+      user:
+        name: ansible
+        system: true
 
-  - name: add ansible-pull cron job
-    cron:
-      name: ansible auto-provision
-      user: ansible
-      minute: "*/10"
-      job: ansible pull -o -U https://g20:3000/imaginationac/ansible-setup.git
+    - name: set up sudo for ansible user
+      copy:
+        src: files/sudoer_ansible
+        dest: /etc/sudoers.d/ansible
+        owner: root
+        group: root
+        mode: 0440
+
+    - name: add ansible-pull cron job
+      cron:
+        name: ansible auto-provision
+        user: ansible
+        minute: "*/10"
+        job: ansible pull -o -U https://g20:3000/imaginationac/ansible-setup.git
