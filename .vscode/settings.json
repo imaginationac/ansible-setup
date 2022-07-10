@@ -1,0 +1,6 @@
+{
+    "yaml.schemas": {
+        "https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible.json#/$defs/playbook": "file://wsl%24/Ubuntu-22.04/home/dorian/projects/ansible-setup/local.yml",
+        "https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible-inventory.json": "file://wsl%24/Ubuntu-22.04/home/dorian/projects/ansible-setup/hosts.yml"
+    }
+}
