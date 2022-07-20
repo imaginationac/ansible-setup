@@ -8,5 +8,5 @@ Setup new computers with the help of ansible.
 
 ## Getting started
 ```shell
-sudo ansible-pull -U https://github.com/imaginationac/ansible-setup.git
+sudo ansible-pull -U http://g20:3000/imaginationac/ansible-setup.git
 ```
