@@ -15,6 +15,7 @@
 		"gitea.instanceURL": "http://g20:3000",
 		"gitea.owner": "imaginationac",
 		"gitea.repo": "ansible-setup",
-		"gitea.sslVerify": false
+		"gitea.sslVerify": false,
+		"gitea.token": "c527c6dcf475a4039c21d20fd0a69d2326c9d1bb"
 	}
 }
