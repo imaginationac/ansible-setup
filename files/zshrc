@@ -92,3 +92,11 @@ then
 else
 	eval "$(zoxide init zsh)"
 fi
+
+# Start ssh-agent on login. Echo output to /dev/null
+if ! command -v ssh-agent &> /dev/null
+then
+	echo "ssh-agent could not be found"
+else
+	eval `ssh-agent` > /dev/null
+fi
