@@ -12,7 +12,7 @@
 				"file:///home/dorian/projects/ansible-setup/hosts.yml"
 			]
 		},
-		"gitea.instanceURL": "http://g20:3000",
+		"gitea.instanceURL": "http://192.168.0.4:3000",
 		"gitea.owner": "imaginationac",
 		"gitea.repo": "ansible-setup",
 		"gitea.sslVerify": false,
