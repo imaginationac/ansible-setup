@@ -12,6 +12,19 @@
       when: ansible_facts['os_family'] == "Debian"
 
   tasks:
+    # Rasbian Pi OS does not have the `gh` package by default. Need to add signing key and repo
+    - name: add github-cli repo signing key
+      ansible.builtin.get_url:
+        url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
+        dest: /usr/share/keyrings/
+        mode: g+r,o+r
+      when: ansible_lsb['id'] == "Raspbian"
+
+    - name: add github-cli repo
+      ansible.builtin.apt_repository:
+        repo: deb [arch=armhf signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main
+        state: present
+
     - name: install packages
       ansible.builtin.package:
         name:

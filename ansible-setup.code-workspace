@@ -11,6 +11,10 @@
 				"file://wsl%24/Ubuntu-22.04/home/dorian/projects/ansible-setup/hosts.yml",
 				"file:///home/dorian/projects/ansible-setup/hosts.yml"
 			]
-		}
+		},
+		"gitea.instanceURL": "http://g20:3000",
+		"gitea.owner": "imaginationac",
+		"gitea.repo": "ansible-setup",
+		"gitea.sslVerify": false
 	}
 }
