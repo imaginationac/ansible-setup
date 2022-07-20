@@ -24,6 +24,7 @@
       ansible.builtin.apt_repository:
         repo: deb [arch=armhf signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main
         state: present
+      when: ansible_lsb['id'] == "Raspbian"
 
     - name: install packages
       ansible.builtin.package:
