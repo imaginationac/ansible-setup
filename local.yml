@@ -112,6 +112,15 @@
         group: dorian
         mode: u=rwx,g=rwx,o=rw
 
+    # Neovim plugin/package manager
+    # https://github.com/wbthomason/packer.nvim
+    - name: clone packer.nvim
+      ansible.builtin.git:
+        repo: https://github.com/wbthomason/packer.nvim
+        dest: /home/dorian/.local/share/nvim/site/pack/packer/start/packer.nvim
+        depth: 1
+        version: HEAD
+
     - name: add ansible user
       user:
         name: ansible
