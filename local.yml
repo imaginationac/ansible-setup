@@ -58,15 +58,7 @@
         dest: /home/dorian/.oh-my-zsh
         version:
       when: not stat_oh_my_zsh_result.stat.exists
-
-    # The above task creates the owner:group as root:root. Need to recursively change to dorian:dorian
-    - name: change owner & group to dorian
-      ansible.builtin.file:
-        path: /home/dorian/.oh-my-zsh
-        owner: dorian
-        group: dorian
-        recurse: true
-        state: directory
+      become_user: dorian
 
     - name: copy zshrc
       ansible.builtin.copy:
@@ -93,16 +85,8 @@
       ansible.builtin.git:
         repo: https://github.com/tmux-plugins/tpm
         dest: /home/dorian/.tmux/plugins/tpm
-        version:
+      become_user: dorian
       when: not stat_tpm_result.stat.exists
-
-    - name: change owner & group of tpm
-      ansible.builtin.file:
-        path: /home/dorian/.tmux
-        owner: dorian
-        group: dorian
-        recurse: true
-        state: directory
 
     - name: copy tmux.conf
       ansible.builtin.copy:
@@ -120,6 +104,7 @@
         dest: /home/dorian/.local/share/nvim/site/pack/packer/start/packer.nvim
         depth: 1
         version: HEAD
+      become_user: dorian
 
     - name: add ansible user
       user:
