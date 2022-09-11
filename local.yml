@@ -35,6 +35,7 @@
           - gh
           - mosh
           - neovim
+          - python3-pip
           - ripgrep
           - tmux
           - zoxide
