@@ -5,13 +5,6 @@
   become: true
 
   pre_tasks:
-    - name: update package cache on Debian-based distros
-      ansible.builtin.apt:
-        update_cache: true
-        state: present
-      when: ansible_facts['os_family'] == "Debian"
-
-  tasks:
     # Raspberry Pi OS does not have the `gh` package by default. Need to add signing key and repo
     - name: add github-cli repo signing key
       ansible.builtin.get_url:
@@ -26,6 +19,13 @@
         state: present
       when: ansible_lsb['id'] == "Raspbian"
 
+    - name: update package cache on Debian-based distros
+      ansible.builtin.apt:
+        update_cache: true
+        state: present
+      when: ansible_facts['os_family'] == "Debian"
+
+  tasks:
     - name: install packages
       ansible.builtin.package:
         name:
