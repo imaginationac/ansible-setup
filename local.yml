@@ -106,7 +106,14 @@
         version: HEAD
       become_user: dorian
 
-    # TODO: Copy
+    # TODO: Copy neovim configuration files
+    - name: copy neovim configuration files
+      ansible.builtin.copy:
+        src: files/neovim/config/nvim
+        dest: /home/dorian/.config
+        owner: dorian
+        group: dorian
+        mode: u+rwx,g+rwx,o+rx
 
     - name: add ansible user
       user:
